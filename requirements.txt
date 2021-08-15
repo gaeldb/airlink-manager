@@ -1,0 +1,4 @@
+netifaces
+gpiozero
+psutil
+panoramisk

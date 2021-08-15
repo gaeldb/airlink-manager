@@ -1,0 +1,60 @@
+<html>
+
+<body>
+
+	<div class="container">
+		<h1>Airlink dahsboard</h1>
+
+		<h2>Statut</h2>
+
+		<h4>Airlink</h4>
+		<ul>
+    		<li>Hostname: {{ data.airlink_hostname }}</li>
+    		<li>Airlink interface IP: {{ data.airlink_interface_ip }}</li>
+    		<li>Airlink VPN: {{ data.airlink_nebula_ip }}</li>
+    		<li>Disk usage: {{ data.airlink_disk_usage }}%</li>
+    		<li>Load average: {{ data.airlink_load_average }}</li>
+    		<li>Process SSHD: {{ data.airlink_process_sshd }}</li>
+    		<li>Process Asterisk: {{ data.airlink_process_asterisk }}</li>
+    		<li>Process VPN: {{ data.airlink_process_vpn }}</li>
+    		<li>Connecté au VPN: {{ data.airlink_lighthouse_connected }}</li>
+    		<li>Connecté à internet: {{ data.airlink_internet_connected }}</li>
+			<li>Température airlink: {{ data.airlink_temp }}°C</li>
+		</ul>
+
+		<h4>Radio</h4>
+		<ul>
+			<li>Température radio: {{ data.temp_repeater }}</li>
+			<li>Voltage radio: XX</li>
+		</ul>
+		<h2>Actions</h2>
+		<ul>
+			<li><a href="{{ url_for('reset') }}">Soft reset radio</a></li>
+			<li><a href="#">Hard reset radio</a></li>
+			<li><a href="{{ url_for('reboot') }}">Reboot Airlink</a></li>
+		</ul>
+
+		<h2>Logs</h2>
+		<pre id="log-output">Chargement...</pre>
+	</div>
+
+	<script>
+	    var output = document.getElementById('log-output');
+
+	    function getNewLines() {
+	    	var xhr = new XMLHttpRequest();
+	    	xhr.open('GET', '{{ url_for('stream') }}');
+		    xhr.send();
+		    xhr.onload = function() {
+		    	output.textContent = xhr.responseText;
+		    };
+	    };
+
+	    setInterval(function() {
+	        getNewLines();
+	    }, 1000);
+	</script>
+
+</body>
+
+</html>
