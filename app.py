@@ -12,24 +12,13 @@ from flask import redirect
 from airlink import monitoring
 from airlink import actions
 
-
 LOOP = asyncio.get_event_loop()
 
 app = Flask(__name__)
 
 
-# async def print_param():
-#     # See https://panoramisk.readthedocs.io/en/latest/manager.html
-#     ami = Manager(host='127.0.0.1', username='admin', secret='1234', port=5038, ssl=False, encoding='utf8')
-#     await ami.connect()
-#     params = await ami.send_command('aradio param')
-#     ami.close()
-#     print(params)
-
-
 @app.route('/')
 def index():
-    #LOOP.run_until_complete(print_param())
     return render_template('index.html', data = monitoring.get_datas())
 
 
@@ -42,6 +31,7 @@ def stream():
 def reboot():
     actions.reboot()
     return redirect('/')
+
 
 @app.route('/action/reset')
 def reset():

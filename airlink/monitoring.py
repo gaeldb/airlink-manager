@@ -1,8 +1,12 @@
 import socket
 import psutil
+import asyncio
 import netifaces as ni
 from gpiozero import CPUTemperature, DiskUsage, LoadAverage, PingServer
 
+from airlink import actions
+
+LOOP = asyncio.get_event_loop()
 
 def is_process_running(pname):
     for proc in psutil.process_iter():
@@ -23,6 +27,7 @@ def get_interface_ip(iface):
 
 def get_datas():
     data = {}
+    LOOP.run_until_complete(actions.get_radio_param(data))
     data['airlink_hostname'] = socket.gethostname()
     data['airlink_interface_ip'] = get_interface_ip('eth0')
     data['airlink_vpn_ip'] = get_interface_ip('nebula1')
@@ -34,7 +39,7 @@ def get_datas():
     data['airlink_load_average'] = LoadAverage().value
     data['airlink_lighthouse_connected'] = PingServer('nebula.ip').is_active
     data['airlink_internet_connected'] = PingServer('google.com').is_active
-    data['temp_repeater'] = "XX"
+    data['radio_temperature'] = "XX"
     return data
 
 

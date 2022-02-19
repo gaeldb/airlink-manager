@@ -9,7 +9,15 @@ def reboot():
     os.system('systemctl reboot -i')
 
 
-async def radio_reset():
+async def get_radio_param(data):
+    # See https://panoramisk.readthedocs.io/en/latest/manager.html
+    await AMI.connect()
+    params = await AMI.send_command('aradio param')
+    AMI.close()
+    data['radio_raw'] = params.content
+
+
+async def set_radio_reset():
     await AMI.connect()
     params = await AMI.send_command('aradio reset')
     AMI.close()
